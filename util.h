@@ -8,6 +8,10 @@
 
 #define DEFAULT_CAPACITY 10
 
+/*
+ * list.c
+ */
+
 typedef struct {
     void *data;
     int element_size;
@@ -28,5 +32,9 @@ void list_add_p(List*, void*);
 void list_add_all(List*, int, ...);
 
 void* list_get_p(List*, int);
+
+int list_find_p(List*, void*);
+
+void list_remove(List*, int);
 
 #endif

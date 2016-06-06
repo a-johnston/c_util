@@ -2,7 +2,7 @@
 
 #define __C_LIST_UTIL
 
-#include "list.h"
+#include "util.h"
 
 static void _realloc_data(List *list) {
     void *temp = realloc(list->data, list->element_size * list->capacity);
@@ -59,6 +59,20 @@ void list_add_all(List *list, int count, ...) {
 
 void* list_get_p(List *list, int i) {
     return list->data + list->element_size * i;
+}
+
+int list_find_p(List *list, void* pointer) {
+    for (int i = 0; i < list->length; i++) {
+        if (memcmp(list->data + i * list->element_size, pointer, list->element_size) == 0) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void list_remove(List *list, int i) {
+    void *p = list->data + i * list->element_size;
+    memmove(p, p + list->element_size, list->element_size);
 }
 
 #endif
