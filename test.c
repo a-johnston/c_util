@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "list.c"
+#include "map.c"
 
 typedef struct {
     int x;
@@ -35,7 +36,7 @@ int main() {
     ss.x = 123;
     ss.y = 3.33;
 
-    list_insert_p(list, 2, &ss);
+    list_insert(list, 2, SomeStruct, ss);
 
     for (int i = 0; i < list->length; i++) {
         ss = list_get(list, SomeStruct, i);

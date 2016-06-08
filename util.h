@@ -53,15 +53,24 @@ void _list_put(List*, int, void*);
  * map.c
  */
 
+struct map_element {
+    char *key;
+    void *value;
+};
+
 typedef struct {
-    List *data;
-    int element_size;
+    struct map_element *data;
+    int size;
 } Map;
 
-#define map_create(type_t) (_list_create(sizeof(type_t)))
-
-Map* _map_create(int);
+Map* map_create();
 
 void map_free(Map*);
+
+void map_put(Map*, char*, void*);
+
+void map_remove(Map*, char*);
+
+List* map_get_values(Map*);
 
 #endif
