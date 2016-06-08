@@ -4,11 +4,18 @@
 
 #include "util.h"
 
+static int int_mod(int i, int m) {
+    if (i >= 0) {
+        return i % m;
+    } else {
+        return m + (i % m);
+    }
+}
+
 static void _realloc_data(List *list) {
     void *temp = realloc(list->data, list->element_size * list->capacity);
 
     if (temp != list->data) {
-        free(list->data);
         list->data = temp;
     }
 }
@@ -44,21 +51,20 @@ void list_add_p(List *list, void *e) {
     _add(list, e);
 }
 
-void list_add_all(List *list, int count, ...) {
-    _ensure_capacity(list, list->length + count, DEFAULT_CAPACITY, 1.5f);
+void list_add_all(List *list, ...) {
+    va_list args;
+    void *arg;
+    va_start(args, list);
 
-    va_list arg;
-    va_start(arg, count);
-
-    while (count-->0) {
-        _add(list, va_arg(arg, void*));
+    while ((arg = va_arg(args, void*)) != NULL) {
+        list_add_p(list, arg);
     }
 
-    va_end(arg);
+    va_end(args);
 }
 
 void* list_get_p(List *list, int i) {
-    return list->data + list->element_size * i;
+    return list->data + list->element_size * int_mod(i, list->length);
 }
 
 int list_find_p(List *list, void* pointer) {
@@ -71,8 +77,10 @@ int list_find_p(List *list, void* pointer) {
 }
 
 void list_remove(List *list, int i) {
+    i = int_mod(i, list->length);
     void *p = list->data + i * list->element_size;
-    memmove(p, p + list->element_size, list->element_size);
+    memmove(p, p + list->element_size, list->element_size * (list->length - i - 1));
+    list->length--;
 }
 
 #endif

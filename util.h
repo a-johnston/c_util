@@ -19,6 +19,8 @@ typedef struct {
     int capacity;
 } List;
 
+#define element(type, x) type x; memset(&x, 0, sizeof(type))
+
 #define list_create(type_t) (_list_create(sizeof(type_t)))
 
 #define list_add(l, type_t, e) do {type_t temp = e; list_add_p(l, &temp);} while (0)
@@ -29,7 +31,7 @@ List* _list_create(int);
 
 void list_add_p(List*, void*);
 
-void list_add_all(List*, int, ...);
+void list_add_all(List*, ...);
 
 void* list_get_p(List*, int);
 

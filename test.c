@@ -9,12 +9,14 @@ typedef struct {
 
 int main() {
     List *list = list_create(SomeStruct);
-    SomeStruct ss;
-    for (int i = 0; i < 1000; i++) {
-        ss = (SomeStruct) {
-            i,
-            i / 2.0
-        };
+    element(SomeStruct, ss);
+
+    list_add_all(list, &ss, &ss, &ss, NULL);
+
+    for (int i = 0; i < 10; i++) {
+        ss.x = i;
+        ss.y = i / 2.0;
+
         list_add_p(list, &ss);
     }
 
@@ -23,9 +25,16 @@ int main() {
     ss = list_get(list, SomeStruct, 1);
     printf("Second element: (%d, %f)\n", ss.x, ss.y);
 
-    ss = (SomeStruct) {
-        10,
-        5.0
-    };
-    printf("Where is (10, 5.0): %d\n", list_find_p(list, &ss));
+    ss.x = 5;
+    ss.y = 5 / 2.0;
+
+    int whereis = list_find_p(list, &ss);
+
+    list_remove(list, whereis);
+
+    for (int i = 0; i < list->length; i++) {
+        ss = list_get(list, SomeStruct, i);
+
+        printf("%d : %d %f\n", i, ss.x, ss.y);
+    }
 }
