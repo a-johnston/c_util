@@ -20,10 +20,14 @@ static void _realloc_data(List *list) {
     }
 }
 
+void list_set_capacity(List *list, int capacity) {
+    list->capacity = capacity;
+    _realloc_data(list);
+}
+
 static void _ensure_capacity(List *list, int length, int buffer, float scale) {
     if (list->capacity < length) {
-        list->capacity = (int) ((length + buffer) * scale);
-        _realloc_data(list);
+        list_set_capacity(list, (int) ((length + buffer) * scale));
     }
 }
 
@@ -44,6 +48,11 @@ List* _list_create(int element_size) {
     _realloc_data(list);
 
     return list;
+}
+
+void list_free(List* list) {
+    free(list->data);
+    free(list);
 }
 
 void list_add_p(List *list, void *e) {
@@ -67,13 +76,27 @@ void* list_get_p(List *list, int i) {
     return list->data + list->element_size * int_mod(i, list->length);
 }
 
-int list_find_p(List *list, void* pointer) {
+int list_find_p(List *list, void *pointer) {
     for (int i = 0; i < list->length; i++) {
         if (memcmp(list->data + i * list->element_size, pointer, list->element_size) == 0) {
             return i;
         }
     }
     return -1;
+}
+
+void list_insert_p(List *list, int i, void *e) {
+    _ensure_capacity(list, list->length + 1, DEFAULT_CAPACITY, 1.5f);
+
+    i = int_mod(i, list->length);
+    void *p = list->data + i * list->element_size;
+    memmove(p + list->element_size, p, list->element_size * (list->length - i - 1));
+    _list_put(list, i, e);
+    list->length++;
+}
+
+void _list_put(List *list, int i, void *e) {
+    memcpy(list->data + i * list->element_size, e, list->element_size);
 }
 
 void list_remove(List *list, int i) {

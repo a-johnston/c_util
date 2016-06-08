@@ -32,9 +32,16 @@ int main() {
 
     list_remove(list, whereis);
 
+    ss.x = 123;
+    ss.y = 3.33;
+
+    list_insert_p(list, 2, &ss);
+
     for (int i = 0; i < list->length; i++) {
         ss = list_get(list, SomeStruct, i);
 
         printf("%d : %d %f\n", i, ss.x, ss.y);
     }
+
+    list_free(list);
 }
