@@ -45,4 +45,12 @@ int main() {
     }
 
     list_free(list);
+
+    Map *map = map_create();
+
+    int x = 123123;
+
+    map_put(map, "key1", &x);
+
+    map_free(map);
 }

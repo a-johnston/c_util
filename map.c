@@ -24,30 +24,35 @@ static char* _copy_key(char *key) {
     return copy;
 }
 
-static int _try_put(Map *map, struct map_element e, int hash, int offset) {
+static void* _try_put(Map *map, struct map_element e, int hash, int offset) {
     int i  = (hash + offset) % map->size;
     struct map_element old = map->data[i];
 
     if (old.value) {
-        return 0;
+        if (strcmp(old.key, e.key) == 0) {
+            map->data[i] = e;
+            return old.value;
+        }
+        return NULL;
     }
 
     map->data[i] = e;
-    return 1;
+    return e.value;
 }
 
 static void _resize_map(Map*);
 
-static void _put(Map *map, struct map_element e) {
+static void* _put(Map *map, struct map_element e) {
     int hash = _hash(e.key);
     for (int i = 0; i < MAX_OFFSET; i++) {
-        if (_try_put(map, e, hash, i)) {
-            return;
+        void *temp;
+        if ((temp = _try_put(map, e, hash, i))) {
+            return temp;
         }
     }
 
     _resize_map(map);
-    _put(map, e);
+    return _put(map, e);
 }
 
 static void _resize_map(Map *map) {
@@ -86,12 +91,17 @@ void map_free(Map *map) {
     free(map);
 }
 
-void map_put(Map *map, char *key, void *value) {
+void* map_put(Map *map, char *key, void *value) {
+    if (!value) {
+        return;
+    }
+
     struct map_element e = (struct map_element) {
         .key   = _copy_key(key),
         .value = value
     };
-    _put(map, e);
+
+    return _put(map, e);
 }
 
 void map_get(Map *map, char *key) {
