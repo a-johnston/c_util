@@ -37,7 +37,7 @@ static void* _try_put(Map *map, struct map_element e, int hash, int offset) {
     }
 
     map->data[i] = e;
-    return e.value;
+    return NULL;
 }
 
 static void _resize_map(Map*);
@@ -104,8 +104,42 @@ void* map_put(Map *map, char *key, void *value) {
     return _put(map, e);
 }
 
+static struct map_element* _get(Map *map, char *key) {
+    int hash = _hash(key);
+    struct map_element *e;
+
+    for (int i = 0; i < MAX_OFFSET; i++) {
+        e = &map->data[(hash + i) % map->size];
+
+        if (strcmp(key, e->key) == 0) {
+            return e;
+        }
+
+        if (!e->key && !e->value) {
+            return NULL;
+        }
+    }
+
+    return NULL;
+}
+
 void* map_get(Map *map, char *key) {
-    return map->data[_hash(key) % map->size].value;
+    struct map_element *e = _get(map, key);
+
+    if (e) {
+        return e->value;
+    }
+
+    return NULL;
+}
+
+void map_remove(Map *map, char *key) {
+    struct map_element *e = _get(map, key);
+
+    if (e) {
+        e->key = NULL + 0x1;
+        e->value = NULL;
+    }
 }
 
 List* map_get_values(Map *map) {
