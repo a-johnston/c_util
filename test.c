@@ -49,8 +49,27 @@ int main() {
     Map *map = map_create();
 
     int x = 123123;
+    int y = 321321;
 
+    map_put(map, "key1", &y);
     map_put(map, "key1", &x);
+
+    map_put(map, "key2", &x);
+    map_put(map, "key3", &x);
+    map_put(map, "key4", &x);
+    map_put(map, "key5", &x);
+    map_put(map, "key6", &x);
+    map_put(map, "key7", &x);
+    map_put(map, "key8", &x);
+    map_put(map, "key9", &x);
+    map_put(map, "key10", &x);
+    map_put(map, "key11", &x);
+    map_put(map, "key12", &x);
+    map_put(map, "key13", &x);
+
+    y = *(int*) map_get(map, "key1");
+
+    printf("Map put and get: %d %d\n", x, y);
 
     map_free(map);
 }

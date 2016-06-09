@@ -67,7 +67,7 @@ Map* map_create();
 
 void map_free(Map*);
 
-void* map_put(Map*, char*, void*);
+void map_put(Map*, char*, void*);
 
 void* map_get(Map*, char*);
 
