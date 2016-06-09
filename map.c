@@ -93,7 +93,7 @@ void map_free(Map *map) {
 
 void* map_put(Map *map, char *key, void *value) {
     if (!value) {
-        return;
+        return NULL;
     }
 
     struct map_element e = (struct map_element) {
@@ -104,8 +104,23 @@ void* map_put(Map *map, char *key, void *value) {
     return _put(map, e);
 }
 
-void map_get(Map *map, char *key) {
+void* map_get(Map *map, char *key) {
+    return map->data[_hash(key) % map->size].value;
+}
 
+List* map_get_values(Map *map) {
+    List *list = list_create(void*);
+
+    struct map_element e;
+
+    for (int i = 0; i < map->size; i++) {
+        e = map->data[i];
+        if (e.value) {
+            list_add_p(list, &e);
+        }
+    }
+
+    return list;
 }
 
 #endif
