@@ -44,7 +44,7 @@ int main() {
         printf("%d : %d %f\n", i, ss.x, ss.y);
     }
 
-    foreach (ss, list) {
+    for each (ss) in (list) {
         printf("foreach %d : %d %f\n", i, ss.x, ss.y);
     }
 
