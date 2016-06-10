@@ -19,6 +19,9 @@ typedef struct {
     int capacity;
 } List;
 
+#define foreach(x, list) \
+for (int i = 0; (memcpy(&x, list_get_p(list, i), list->element_size)), i < list->length; i++)
+
 #define element(type, x) type x; memset(&x, 0, sizeof(type))
 
 #define list_create(type_t) (_list_create(sizeof(type_t)))

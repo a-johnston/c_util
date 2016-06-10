@@ -44,6 +44,10 @@ int main() {
         printf("%d : %d %f\n", i, ss.x, ss.y);
     }
 
+    foreach (ss, list) {
+        printf("foreach %d : %d %f\n", i, ss.x, ss.y);
+    }
+
     list_free(list);
 
     Map *map = map_create();
