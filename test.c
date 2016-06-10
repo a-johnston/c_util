@@ -45,7 +45,7 @@ int main() {
     }
 
     for each (ss) in (list) {
-        printf("foreach %d : %d %f\n", i, ss.x, ss.y);
+        printf("foreach %d %f\n", ss.x, ss.y);
     }
 
     list_free(list);

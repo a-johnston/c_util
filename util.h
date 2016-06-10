@@ -21,9 +21,9 @@ typedef struct {
 
 //#define each(t, x, list) (int i = 0; (x = *(t*)list_get_p(list, i)), i < list->length; i++)
 
-#define each(x) (long i = 0, p = (long) &x;
+#define each(x) (long _i = 0, _p = (long) &x;
 
-#define in(list) ((memcpy((void*) p, list_get_p(list, i), list->element_size))), i < list->length; i++)
+#define in(list) ((memcpy((void*) _p, list_get_p(list, _i), list->element_size))), _i < list->length; _i++)
 
 #define element(type, x) type x; memset(&x, 0, sizeof(type))
 
